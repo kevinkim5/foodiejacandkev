@@ -1,5 +1,5 @@
 "use client";
-import { Avatar, Card, Col, Icon, Row } from "antd";
+import { Avatar, Card, Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import { getAPICall } from "@/lib/apiManager";
 import Image from "next/image";
