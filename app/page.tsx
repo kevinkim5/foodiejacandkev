@@ -31,19 +31,26 @@ function Home() {
     fetchData();
   }, []);
 
+  const renderImage = (src: string, marginRight = 0) => {
+    return (
+      <Image
+        src={src}
+        alt="MichelinStar"
+        width="16"
+        height="16"
+        style={{ marginRight }}
+      />
+    );
+  };
+
   const getDescription = (description: string | null) => {
     if (!description) return <></>;
-    if (["1", "2", "3", "Guide"].includes(description)) {
-      return (
-        <Image
-          src={
-            description === "Guide" ? `/MichelinGuide.png` : `/MichelinStar.svg`
-          }
-          alt="MichelinStar"
-          width="16"
-          height="16"
-        />
-      );
+    if (description === "Guide") return renderImage("/MichelinGuide.png");
+    if (["1", "2", "3"].includes(description)) {
+      const images = Array(Number(description))
+        .fill("/MichelinStar.svg")
+        .map((src, index) => renderImage(src, 5));
+      return <Row>{images}</Row>;
     }
     return <>{description}</>;
   };
