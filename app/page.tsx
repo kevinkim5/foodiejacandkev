@@ -1,8 +1,8 @@
 "use client";
-import Head from "next/head";
-import { Card, Col, Row } from "antd";
+import { Avatar, Card, Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import { getAPICall } from "@/lib/apiManager";
+import Image from "next/image";
 
 interface Restaurant {
   country: string;
@@ -12,6 +12,8 @@ interface Restaurant {
   ourRating: number | null;
   willReturn: boolean | null;
 }
+
+const { Meta } = Card;
 
 function Home() {
   const [loading, setLoading] = useState(true);
@@ -29,11 +31,25 @@ function Home() {
     fetchData();
   }, []);
 
+  const getDescription = (description: string | null) => {
+    if (!description) return <></>;
+    if (["1", "2", "3", "Guide"].includes(description)) {
+      return (
+        <Image
+          src={
+            description === "Guide" ? `/MichelinGuide.png` : `/MichelinStar.svg`
+          }
+          alt="MichelinStar"
+          width="16"
+          height="16"
+        />
+      );
+    }
+    return <>{description}</>;
+  };
+
   return (
     <div>
-      <Head>
-        <title>Foodie Jac & Kev</title>
-      </Head>
       {loading ? (
         <>Loading</>
       ) : (
@@ -41,8 +57,16 @@ function Home() {
           {restaurants.map((r) => {
             return (
               <Col xs={24} lg={8} key={r.name}>
-                <Card title={r.name} bordered={false}>
-                  {r.country}
+                <Card bordered={false}>
+                  <Meta
+                    avatar={
+                      <Avatar
+                        src={`https://flagcdn.com/w80/${r.country.toLowerCase()}.png`}
+                      />
+                    }
+                    title={r.name}
+                    description={getDescription(r.michelin)}
+                  />
                 </Card>
               </Col>
             );
